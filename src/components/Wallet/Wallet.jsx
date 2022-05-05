@@ -1,4 +1,5 @@
 import Transfer from "./components/Transfer";
+// import Progress from "./components/Progress";
 import NativeBalance from "../NativeBalance";
 import Address from "../Address/Address";
 import Blockie from "../Blockie";
@@ -27,18 +28,21 @@ const styles = {
 
 function Wallet() {
   return (
-    <Card
-      style={styles.card}
-      title={
-        <div style={styles.header}>
-          <Blockie scale={5} avatar currentWallet style />
-          <Address size="6" copyable />
-          <NativeBalance />
-        </div>
-      }
-    >
-      <Transfer />
-    </Card>
+    <>
+      {/* <Progress /> */}
+      <Card
+        style={styles.card}
+        title={
+          <div style={styles.header}>
+            <Blockie scale={5} avatar currentWallet style />
+            <Address size="6" copyable />
+            <NativeBalance />
+          </div>
+        }
+      >
+        <Transfer />
+      </Card>
+    </>
   );
 }
 

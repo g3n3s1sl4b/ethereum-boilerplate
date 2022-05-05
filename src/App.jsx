@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Account from "components/Account/Account";
 import Chains from "components/Chains";
-import TokenPrice from "components/TokenPrice";
+// import TokenPrice from "components/TokenPrice";
 import ERC20Balance from "components/ERC20Balance";
 import ERC20Transfers from "components/ERC20Transfers";
 import DEX from "components/DEX";
@@ -20,10 +20,11 @@ import NativeBalance from "components/NativeBalance";
 import "./style.css";
 import QuickStart from "components/QuickStart";
 import Contract from "components/Contract/Contract";
-import Text from "antd/lib/typography/Text";
+// import Text from "antd/lib/typography/Text";
 import Ramper from "components/Ramper";
 import MenuItems from "./components/MenuItems";
-const { Header, Footer } = Layout;
+// const { Header, Footer } = Layout;
+const { Header } = Layout;
 
 const styles = {
   content: {
@@ -74,12 +75,12 @@ const App = ({ isServerInfo }) => {
           <MenuItems />
           <div style={styles.headerRight}>
             <Chains />
-            <TokenPrice
+            {/* <TokenPrice
               address="0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
               chain="eth"
               image="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg/"
               size="40px"
-            />
+            /> */}
             <NativeBalance />
             <Account />
           </div>
@@ -133,7 +134,7 @@ const App = ({ isServerInfo }) => {
           </Switch>
         </div>
       </Router>
-      <Footer style={{ textAlign: "center" }}>
+      {/* <Footer style={{ textAlign: "center" }}>
         <Text style={{ display: "block" }}>
           ⭐️ Please star this{" "}
           <a
@@ -167,7 +168,7 @@ const App = ({ isServerInfo }) => {
             Moralis
           </a>
         </Text>
-      </Footer>
+      </Footer> */}
     </Layout>
   );
 };
