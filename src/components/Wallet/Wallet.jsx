@@ -31,7 +31,7 @@ function Wallet() {
   return (
     <Space
       direction="vertical"
-      size="middle"
+      size="large"
       align="center"
       style={{ display: "flex" }}
     >

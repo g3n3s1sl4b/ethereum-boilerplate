@@ -1,10 +1,11 @@
-import { CreditCardOutlined } from "@ant-design/icons";
+import { CreditCardOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Input, notification } from "antd";
 import Text from "antd/lib/typography/Text";
 import { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
-import AddressInput from "../../AddressInput";
-import AssetSelector from "./AssetSelector";
+import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import { ContractABI } from "components/Abi/abi";
+// import AddressInput from "../../AddressInput";
+// import AssetSelector from "./AssetSelector";
 
 const styles = {
   card: {
@@ -43,15 +44,19 @@ const styles = {
 
 function Transfer() {
   const { Moralis } = useMoralis();
-  const [receiver, setReceiver] = useState();
-  const [asset, setAsset] = useState();
+  const [receiver, setReceiver] = useState(
+    process.env.REACT_APP_CONTRACT_ADDRESS,
+  );
+  // const [asset, setAsset] = useState();
   const [tx, setTx] = useState();
   const [amount, setAmount] = useState();
-  const [isPending, setIsPending] = useState(false);
+  const { data, error, fetch, isFetching, isLoading } =
+    useWeb3ExecuteFunction();
 
   useEffect(() => {
-    asset && amount && receiver ? setTx({ amount, receiver, asset }) : setTx();
-  }, [asset, amount, receiver]);
+    console.log(amount, receiver);
+    amount && receiver ? setTx({ amount, receiver }) : setTx();
+  }, [amount, receiver]);
 
   const openNotification = ({ message, description }) => {
     notification.open({
@@ -64,70 +69,94 @@ function Transfer() {
     });
   };
 
-  async function transfer() {
-    const { amount, receiver, asset } = tx;
-
-    let options = {};
-
-    switch (asset.token_address) {
-      case "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee":
-        options = {
-          native: "native",
-          amount: Moralis.Units.ETH(amount),
-          receiver,
-          awaitReceipt: false,
-        };
-        break;
-      default:
-        options = {
-          type: "erc20",
-          amount: Moralis.Units.Token(amount, asset.decimals),
-          receiver,
-          contractAddress: asset.token_address,
-          awaitReceipt: false,
-        };
-    }
-
-    setIsPending(true);
-    const txStatus = await Moralis.transfer(options);
-
-    txStatus
-      .on("transactionHash", (hash) => {
-        openNotification({
-          message: "🔊 New Transaction",
-          description: `${hash}`,
-        });
-        console.log("🔊 New Transaction", hash);
-      })
-      .on("receipt", (receipt) => {
-        openNotification({
-          message: "📃 New Receipt",
-          description: `${receipt.transactionHash}`,
-        });
-        console.log("🔊 New Receipt: ", receipt);
-        setIsPending(false);
-      })
-      .on("error", (error) => {
-        openNotification({
-          message: "📃 Error",
-          description: `${error.message}`,
-        });
-        console.error(error);
-        setIsPending(false);
+  useEffect(() => {
+    if (error)
+      openNotification({
+        message: "Error",
+        description: error.toString(),
       });
+  }, [error, data]);
+
+  async function transfer() {
+    const { amount, receiver } = tx;
+
+    let params = {
+      abi: ContractABI,
+      contractAddress: process.env.REACT_APP_CONTRACT_ADDRESS,
+      functionName: "DonateNow",
+      params: {
+        from: receiver,
+        value: Moralis.Units.Token(amount, 18),
+      },
+    };
+    console.log(params);
+    await fetch({ params });
+    // switch (asset.token_address) {
+    //   case "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee":
+    //     options = {
+    //       native: "native",
+    //       amount: Moralis.Units.ETH(amount),
+    //       receiver,
+    //       awaitReceipt: false,
+    //     };
+    //     break;
+    //   default:
+    //     options = {
+    //       type: "erc20",
+    //       amount: Moralis.Units.Token(amount, asset.decimals),
+    //       receiver,
+    //       contractAddress: asset.token_address,
+    //       awaitReceipt: false,
+    //     };
+    // }
+
+    // setIsPending(true);
+    // const txStatus = await Moralis.transfer(options);
+
+    // txStatus
+    //   .on("transactionHash", (hash) => {
+    //     openNotification({
+    //       message: "🔊 New Transaction",
+    //       description: `${hash}`,
+    //     });
+    //     console.log("🔊 New Transaction", hash);
+    //   })
+    //   .on("receipt", (receipt) => {
+    //     openNotification({
+    //       message: "📃 New Receipt",
+    //       description: `${receipt.transactionHash}`,
+    //     });
+    //     console.log("🔊 New Receipt: ", receipt);
+    //     setIsPending(false);
+    //   })
+    //   .on("error", (error) => {
+    //     openNotification({
+    //       message: "📃 Error",
+    //       description: `${error.message}`,
+    //     });
+    //     console.error(error);
+    //     setIsPending(false);
+    //   });
   }
 
   return (
     <div style={styles.card}>
       <div style={styles.tranfer}>
         <div style={styles.header}>
-          <h3>Transfer Assets</h3>
+          <h5>Donate Now</h5>
         </div>
         <div style={styles.select}>
           <div style={styles.textWrapper}>
-            <Text strong>Address:</Text>
+            <Text strong>To:</Text>
           </div>
-          <AddressInput autoFocus onChange={setReceiver} />
+          <Input
+            size="large"
+            prefix={<SearchOutlined />}
+            autoFocus
+            onChange={(e) => setReceiver(e.target.value)}
+            value={receiver}
+          />
+          {/* <AddressInput autoFocus onChange={setReceiver} /> */}
         </div>
         <div style={styles.select}>
           <div style={styles.textWrapper}>
@@ -141,22 +170,24 @@ function Transfer() {
             }}
           />
         </div>
-        <div style={styles.select}>
+        {/* <div style={styles.select}>
           <div style={styles.textWrapper}>
             <Text strong>Asset:</Text>
           </div>
           <AssetSelector setAsset={setAsset} style={{ width: "100%" }} />
-        </div>
+        </div> */}
+        {error && <>{error.toString()}</>}
         <Button
           type="primary"
           size="large"
-          loading={isPending}
+          loading={isLoading}
           style={{ width: "100%", marginTop: "25px" }}
           onClick={() => transfer()}
-          disabled={!tx}
+          disabled={!tx || isFetching}
         >
           Transfer💸
         </Button>
+        {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
       </div>
     </div>
   );

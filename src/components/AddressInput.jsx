@@ -107,6 +107,7 @@ function AddressInput(props) {
         updateAddress(e.target.value);
       }}
       disabled={validatedAddress}
+      defaultValue={process.env.REACT_APP_CONTRACT_ADDRESS}
       style={
         validatedAddress
           ? { ...props?.style, border: "1px solid rgb(33, 191, 150)" }
