@@ -9,11 +9,11 @@ export default function AssetSelector({ setAsset, style }) {
   const { Moralis } = useMoralis();
 
   const fullBalance = useMemo(() => {
-    if (!assets || !nativeBalance) return null;
+    if (!assets || !nativeBalance || !nativeToken) return null;
     return [
       ...assets,
       {
-        balance: nativeBalance.balance,
+        balance: nativeBalance.balance || 0,
         decimals: nativeToken.decimals,
         name: nativeToken.name,
         symbol: nativeToken.symbol,
@@ -31,7 +31,6 @@ export default function AssetSelector({ setAsset, style }) {
     <Select onChange={handleChange} size="large" style={style}>
       {fullBalance &&
         fullBalance.map((item) => {
-          console.log(item);
           return (
             <Select.Option
               value={item["token_address"]}
@@ -67,7 +66,7 @@ export default function AssetSelector({ setAsset, style }) {
                   <p style={{ alignSelf: "right" }}>
                     (
                     {parseFloat(
-                      Moralis?.Units?.FromWei(item.balance, item.decimals),
+                      Moralis?.Units?.FromWei(item.balance || 0, item.decimals),
                     )?.toFixed(6)}
                     )
                   </p>

@@ -1,8 +1,10 @@
 import Transfer from "./components/Transfer";
+import ERC20Tranfers from "components/ERC20Transfers";
+import Progress from "components/Progress/ProgressBar";
 import NativeBalance from "../NativeBalance";
 import Address from "../Address/Address";
 import Blockie from "../Blockie";
-import { Card } from "antd";
+import { Card, Space } from "antd";
 
 const styles = {
   title: {
@@ -27,18 +29,27 @@ const styles = {
 
 function Wallet() {
   return (
-    <Card
-      style={styles.card}
-      title={
-        <div style={styles.header}>
-          <Blockie scale={5} avatar currentWallet style />
-          <Address size="6" copyable />
-          <NativeBalance />
-        </div>
-      }
+    <Space
+      direction="vertical"
+      size="middle"
+      align="center"
+      style={{ display: "flex" }}
     >
-      <Transfer />
-    </Card>
+      <Progress />
+      <Card
+        style={styles.card}
+        title={
+          <div style={styles.header}>
+            <Blockie scale={5} avatar currentWallet style />
+            <Address size="6" copyable />
+            <NativeBalance />
+          </div>
+        }
+      >
+        <Transfer />
+      </Card>
+      <ERC20Tranfers />
+    </Space>
   );
 }
 

@@ -1,34 +1,32 @@
 import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Account from "components/Account/Account";
 import Chains from "components/Chains";
-import TokenPrice from "components/TokenPrice";
-import ERC20Balance from "components/ERC20Balance";
 import ERC20Transfers from "components/ERC20Transfers";
-import DEX from "components/DEX";
-import NFTBalance from "components/NFTBalance";
 import Wallet from "components/Wallet";
-import { Layout, Tabs } from "antd";
+import { Layout } from "antd";
 import "antd/dist/antd.css";
 import NativeBalance from "components/NativeBalance";
 import "./style.css";
-import QuickStart from "components/QuickStart";
-import Contract from "components/Contract/Contract";
-import Text from "antd/lib/typography/Text";
-import Ramper from "components/Ramper";
-import MenuItems from "./components/MenuItems";
-const { Header, Footer } = Layout;
+// import MenuItems from "./components/MenuItems";
+// import TokenPrice from "components/TokenPrice";
+// import ERC20Balance from "components/ERC20Balance";
+// import DEX from "components/DEX";
+// import NFTBalance from "components/NFTBalance";
+// import { Layout, Tabs } from "antd";
+// import QuickStart from "components/QuickStart";
+// import Contract from "components/Contract/Contract";
+// import Text from "antd/lib/typography/Text";
+// import Ramper from "components/Ramper
+// const { Header, Footer } = Layout;
+const { Header } = Layout;
 
 const styles = {
   content: {
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
     fontFamily: "Roboto, sans-serif",
     color: "#041836",
     marginTop: "130px",
@@ -40,7 +38,7 @@ const styles = {
     width: "100%",
     background: "#fff",
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "end",
     alignItems: "center",
     fontFamily: "Roboto, sans-serif",
     borderBottom: "2px solid rgba(0, 0, 0, 0.06)",
@@ -55,7 +53,7 @@ const styles = {
     fontWeight: "600",
   },
 };
-const App = ({ isServerInfo }) => {
+const App = () => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
     useMoralis();
 
@@ -70,16 +68,16 @@ const App = ({ isServerInfo }) => {
     <Layout style={{ height: "100vh", overflow: "auto" }}>
       <Router>
         <Header style={styles.header}>
-          <Logo />
-          <MenuItems />
+          {/* <Logo /> */}
+          {/* <MenuItems /> */}
           <div style={styles.headerRight}>
             <Chains />
-            <TokenPrice
+            {/* <TokenPrice
               address="0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
               chain="eth"
               image="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg/"
               size="40px"
-            />
+            /> */}
             <NativeBalance />
             <Account />
           </div>
@@ -87,13 +85,13 @@ const App = ({ isServerInfo }) => {
 
         <div style={styles.content}>
           <Switch>
-            <Route exact path="/quickstart">
+            {/* <Route exact path="/quickstart">
               <QuickStart isServerInfo={isServerInfo} />
-            </Route>
-            <Route path="/wallet">
+            </Route> */}
+            <Route path="/">
               <Wallet />
             </Route>
-            <Route path="/1inch">
+            {/* <Route path="/1inch">
               <Tabs defaultActiveKey="1" style={{ alignItems: "center" }}>
                 <Tabs.TabPane tab={<span>Ethereum</span>} key="1">
                   <DEX chain="eth" />
@@ -111,29 +109,29 @@ const App = ({ isServerInfo }) => {
             </Route>
             <Route path="/onramp">
               <Ramper />
-            </Route>
+            </Route> */}
             <Route path="/erc20transfers">
               <ERC20Transfers />
             </Route>
-            <Route path="/nftBalance">
+            {/* <Route path="/nftBalance">
               <NFTBalance />
             </Route>
             <Route path="/contract">
               <Contract />
-            </Route>
-            <Route path="/">
+            </Route> */}
+            {/* <Route path="/">
               <Redirect to="/quickstart" />
-            </Route>
-            <Route path="/ethereum-boilerplate">
+            </Route> */}
+            {/* <Route path="/ethereum-boilerplate">
               <Redirect to="/quickstart" />
             </Route>
             <Route path="/nonauthenticated">
               <>Please login using the "Authenticate" button</>
-            </Route>
+            </Route> */}
           </Switch>
         </div>
       </Router>
-      <Footer style={{ textAlign: "center" }}>
+      {/* <Footer style={{ textAlign: "center" }}>
         <Text style={{ display: "block" }}>
           ⭐️ Please star this{" "}
           <a
@@ -167,7 +165,7 @@ const App = ({ isServerInfo }) => {
             Moralis
           </a>
         </Text>
-      </Footer>
+      </Footer> */}
     </Layout>
   );
 };
