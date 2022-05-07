@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { ProgressBar } from "react-bootstrap";
 import "bootstrap/dist/css/boostrap.min.css";
 
@@ -16,6 +17,8 @@ export default function Progress() {
       background: "white",
     },
   };
+
+  useEffect(() => {}, []);
 
   return (
     <div style={styles.progressContainer}>
